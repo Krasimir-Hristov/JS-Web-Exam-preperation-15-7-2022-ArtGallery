@@ -1,5 +1,5 @@
 const { isUser, isGuest } = require('../middleware/guards');
-const { register, login } = require('../services/user');
+const { register, login } = require('../services/userService');
 const mapErrors = require('../util/mappers');
 
 const router = require('express').Router();
@@ -9,7 +9,6 @@ router.get('/register', isGuest(), (req, res) => {
     res.render('register')
 });
 
-//TODO check form action, method, field names
 router.post('/register', isGuest(), async (req, res) => {
     try {
         if (req.body.password == '') {
