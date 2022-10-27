@@ -1,6 +1,6 @@
 const { isUser, isOwner } = require('../middleware/guards');
 const preload = require('../middleware/preload');
-const { createPublication, updatePublication, deletePublication,  } = require('../services/publications');
+const { createPublication, updatePublication, deletePublication, sharePublication,  } = require('../services/publications');
 const mapErrors = require('../util/mappers');
 
 const router = require('express').Router();
@@ -65,25 +65,25 @@ router.post('/create', isUser(), async (req, res) => {
         res.redirect('/catalog')
     });     
 
-    // router.get('/join/:id', isUser(),  async (req, res) => {
+    router.get('/share/:id', isUser(),  async (req, res) => {
 
 
-    //     const id = req.params.id;
+        const id = req.params.id;
 
-    //     try {
-    //         await joinTrip(id, req.session.user._id);
+        try {
+            await sharePublication(id, req.session.user._id);
 
-    //     } catch (err) {
-    //         console.error(err);
-    //     } finally {
-    //         res.redirect('/trips/' + id);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            res.redirect('/catalog/' + id);
 
-    //     }
+        }
 
 
 
         
-    // }); 
+    }); 
 
 
 module.exports = router;    
