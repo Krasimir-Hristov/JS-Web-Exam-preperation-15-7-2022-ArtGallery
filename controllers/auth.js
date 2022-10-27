@@ -19,7 +19,6 @@ router.post('/register', isGuest(), async (req, res) => {
         res.redirect('/'); 
     } catch (err) {
         console.error(err);
-        //TODO send error messages
         const errors = mapErrors(err);
         res.render('register', { data: { username: req.body.username }, errors });
     }

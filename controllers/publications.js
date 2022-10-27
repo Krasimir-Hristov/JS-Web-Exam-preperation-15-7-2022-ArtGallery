@@ -1,6 +1,6 @@
 const { isUser, isOwner } = require('../middleware/guards');
 const preload = require('../middleware/preload');
-const { createPublication,  } = require('../services/publications');
+const { createPublication, updatePublication, deletePublication,  } = require('../services/publications');
 const mapErrors = require('../util/mappers');
 
 const router = require('express').Router();
@@ -33,42 +33,37 @@ router.post('/create', isUser(), async (req, res) => {
         }
     });
 
-    // router.get('/edit/:id', preload(), isOwner(), (req, res) => {
-    //     res.render('edit', { title: 'Edit Offer' }); 
-    // });
+    router.get('/edit/:id', preload(), isOwner(), (req, res) => {
+        res.render('edit', { title: 'Edit Offer' }); 
+    }); 
+    router.post('/edit/:id', preload(), isOwner(), async (req, res) => {
+        const id = req.params.id;
 
-    // router.post('/edit/:id', preload(), isOwner(), async (req, res) => {
-    //     const id = req.params.id;
-    //     const trip = {
-    //         start: req.body.start,
-    //         end: req.body.end,
-    //         date: req.body.date,
-    //         time: req.body.time,
-    //         carImg: req.body.carImg,
-    //         carBrand: req.body.carBrand,
-    //         seats: Number(req.body.seats),
-    //         price: Number(req.body.price),
-    //         description: req.body.description,
-    //     };
+        const publication = {
+            title: req.body.title,
+            technique: req.body.technique,
+            picture: req.body.picture,
+            certificate: req.body.certificate,
+        };
 
-    //     try {
-    //         await updateTrip(id, trip);
-    //     res.redirect('/trips/' + id);
+        try {
+            await updatePublication(id, publication);
+        res.redirect('/catalog/' + id);
             
-    //     } catch (err) {
-    //         console.error(err);
-    //         const errors = mapErrors(err);
-    //         trip._id = id;
-    //         res.render('edit', { title: 'Create Trip Offer',  trip, errors });
-    //     }
+        } catch (err) {
+            console.error(err);
+            const errors = mapErrors(err);
+            publication._id = id;
+            res.render('edit', { title: 'Update Publication',  publication, errors });
+        }
 
-    // });
+    });
             
 
-    // router.get('/delete/:id', preload(), isOwner(), async (req, res) => {
-    //     await deleteById(req.params.id);
-    //     res.redirect('/trips')
-    // });     
+    router.get('/delete/:id', preload(), isOwner(), async (req, res) => {
+        await deletePublication(req.params.id);
+        res.redirect('/catalog')
+    });     
 
     // router.get('/join/:id', isUser(),  async (req, res) => {
 

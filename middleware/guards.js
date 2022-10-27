@@ -21,8 +21,7 @@ function isGuest() {
 function isOwner() {
     return function (req, res, next) {
         const userId = req.session.user?._id;
-        //TODO change property name to match  collection
-        if (res.locals.data.owner == userId) {
+        if (res.locals.publication.author == userId) {
             next();
         } else {
           
